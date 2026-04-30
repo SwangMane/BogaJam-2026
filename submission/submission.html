@@ -2,83 +2,2559 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Joel</title>
+  <title>Not Joel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style type="text/css">
-    html,
-    body {
+    @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Press+Start+2P&family=Zen+Dots&display=swap'); /* COOL TITLE FONT | BLOCKY TEXT | ALIEN TEXT | NORMAL TEXT */
+    @import url('https://fonts.googleapis.com/css2?family=Homenaje&display=swap');
+
+    /* font-family: "Press Start 2P" | font-family: "Zen Dots" | font-family: "Google Sans Flex" |  font-family: "Homenaje", sans-serif;*/
+
+    /*  color palette
+
+      #000000 | black  | text, shadows, outlines
+      #841818 | maroon | adPop, important text, shadows
+      #E0BB20 | yellow | stars, button hovers, shadows
+      #FAFAFA | white  | background colors
+    */
+/*****************************************************************************************/
+    html, body { 
       background: transparent;
       margin: 0;
       padding: 0;
-      font-family: sans-serif;
+      font-family: "Google Sans Flex";
+      cursor: none;
     }
 
-    #overlay-container {
+/*****************************************************************************************/    
+    /* page-wrapper */
+    #pageWrap {
       width: 960px;
       height: 540px;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
     }
 
-    /* Your style here... (feel free to remove this example styling) */
-    #skip {
-      display: none; /* Hidden until ad starts */
+/*****************************************************************************************/    
+    /* OTHER WRAPPERS */
+      #captchaGame {
+        background: transparent;
+        padding: 0;
+        margin: 0;
+      }
+
+/*****************************************************************************************/
+    /* COMPLETE PAGE STUFF */
+      #completeWrap {
+        position: absolute;
+        z-index: 900;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        opacity: 0;
+        padding: 8px;
+        margin: 0;
+        animation: fade_in 0.5s forwards, bcg_fade 0.5s forwards;
+        box-sizing: border-box;
+        top: 0;
+        left: 0;
+        background: transparent;  
+      }
+      #completeInWrap {
+        z-index: 400;
+        animation: ad_grow 1s forwards;
+        padding: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+      #finishBtnsWrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        width: 90%;
+        height: auto;
+        position: absolute;
+        bottom: 16px;
+        user-select: none;
+      }
+      #finishBtnsWrap button {
+        font-size: 1.5rem;
+        user-select: none;
+      }
+      #completeInWrap h1 {
+        margin: 0;
+        padding: 24px 0 0 0;
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+      }
+      #completeInWrap span {
+        font-size: 3rem;
+        color: green;
+        user-select: none;
+      }
+      #ratingWrapStarWrapFinish {
+        width: 100%;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        gap: 8px;
+      }
+      #ratingSubtitleFinish {
+        margin: 0;
+        padding: 0;
+        height: 16px;
+        width: auto;
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 100;
+      }
+      #ratingWrapStarWrapFinish span {
+        font-size: 30px;
+        color: rgb(163, 163, 163);
+        cursor: pointer;
+      }
+      #ratingWrapStarWrapFinish span.active {
+        color: gold;
+        transition: color 0.15s ease;
+      }
+      #ratingWrapStarWrapFinish span:hover {
+        transition: color 0.15s ease;
+        color: gold;
+      }  
+
+/*****************************************************************************************/
+    /* AD POP ITEMS */
+      .adWrap {
+        height: 90%;
+        aspect-ratio: 4 / 3;
+        background: #FAFAFA;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 4px;
+        box-sizing: border-box;
+        box-shadow: 0 0 2px 4px rgb(0, 0, 0, 0.7),        /* outer border */
+                    inset 0 0 0 4px white,  /* inner border */
+                    inset 0 0 0 5px black;
+        padding: 12px;
+        margin: 0;
+        cursor: pointer;
+      }
+      #adPopWrap {
+        position: absolute;
+        z-index: 300;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        opacity: 0;
+        padding: 8px;
+        margin: 0;
+        animation: fade_in 0.5s forwards, bcg_fade 0.5s forwards;
+        box-sizing: border-box;
+        top: 0;
+        left: 0;
+        background: transparent;  
+      }
+      #adPopWrapInside {
+        z-index: 400;
+        animation: ad_grow 1s forwards;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #adWrapBtnsWrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        width: 90%;
+        height: auto;
+        position: absolute;
+        bottom: 16px;
+        user-select: none;
+      }
+      #adWrapBtnsWrap button {
+        font-size: 1.5rem;
+        user-select: none;
+      }
+      .adWrap button:hover {
+        background-color: #E0BB20;
+        box-shadow: 0 0 0.5px 0.5px rgba(0, 0, 0, 0.25);
+      }  
+      #ratingWrap {
+        min-width: 75%;
+        height: auto;
+        position: absolute;
+        padding: 12px 32px;
+        border-radius: 4px;
+        background-color: #dddddd;
+        box-shadow: 0 0 2px 2px black,
+                    inset 0 0 0 3px white,
+                    inset 0 0 0 4px black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        flex-direction: column;
+        font-size: 1.5rem;
+        bottom: 90px;
+      }
+      .adWrap h3 {
+        padding: 0;
+        margin: 0;
+        font-weight: 100;
+        display: flex;
+        flex-direction: column;
+        user-select: none;
+      }
+      .fact {
+        padding: 0 0 0 12px;
+        overflow-wrap: break-word;
+        user-select: none;
+        text-align: center;
+        font-size: 1.5rem;
+      }
+      .question {
+        text-align: center;
+        text-decoration: underline;
+        font-size: 2.5rem;
+        background-color: #FAFAFA;
+      }
+      #funFact {
+        width: 90%;
+        margin: 24px auto auto auto;
+        user-select: none;
+        font-size: 1.5rem;
+      }
+      #ratingWrapStarWrap {
+        width: 100%;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        gap: 8px;
+      }
+      #ratingSubtitle {
+        margin: 0;
+        padding: 0;
+        height: 16px;
+        width: auto;
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 100;
+      }
+      #ratingWrapStarWrap span {
+        font-size: 30px;
+        color: rgb(163, 163, 163);
+        cursor: pointer;
+      }
+      #ratingWrapStarWrap span.active {
+        color: gold;
+        transition: color 0.15s ease;
+      }
+      #ratingWrapStarWrap span:hover {
+        transition: color 0.15s ease;
+        color: gold;
+      }  
+
+/*****************************************************************************************/      
+/* INCOMPLETE SCREEN ITEMS */
+      #incompleteWrap {
+        z-index: 900;
+        animation: ad_grow 0.25s forwards;
+        display: none;
+        padding: 24px 0 0 0;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;   
+      }
+      #incompleteWrap h1 {
+        font-family: "Google Sans Flex";
+        font-size: 1.5rem;
+        line-height: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        user-select: none;
+        height: auto;
+        width: 90%;
+      }
+      #incompleteWrap h1 span {
+        font-size: 4rem;
+        color: #841818;
+        user-select: none;
+      }
+      #incBtnsWrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        width: 90%;
+        height: auto;
+        position: absolute;
+        bottom: 16px;
+        user-select: none;
+      }
+
+      #incBtnsWrap button {
+        font-size: 1.5rem;
+        user-select: none;
+      }
+
+/*****************************************************************************************/      
+/* REPORT SCREEN ITEMS */
+      #reportWrap {
+        z-index: 500;
+        animation: ad_grow 0.25s forwards;
+        display: none;
+        padding: 64px 0 0 0;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+      }    
+      #reportTitle {
+        margin: 0; 
+        text-align: center;
+        width: 90%;
+        font-size: 1.5rem;
+      }
+      #reportBtnsWrap{
+        cursor: pointer;
+        width: 90%;
+        height: auto;
+        padding: 16px 0 0 0;
+        margin: 8px auto;
+        font-family: "Google Sans Flex";
+      }
+      #reportSubmitBtnsWrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        width: 90%;
+        height: auto;
+        position: absolute;
+        bottom: 16px;
+        user-select: none;
+      }
+      #reportSubmitBtnsWrap button {
+        font-size: 1.5rem;
+        user-select: none;
+      }
+      #customReportBox {
+        width: 90%;
+        height: auto;
+        font-family: "Google Sans Flex";
+        margin: 12px auto auto auto;
+        display: none;
+      }
+      #customReportBox input {
+        width: 100%;
+        height: 100%;
+        padding: 8px;
+        text-align: left;
+        align-items: top;
+      }
+      #reportBtnsWrap label {
+        cursor: pointer;
+        font-size: 1.25rem;
+        font-weight: 100;
+        user-select: none;
+        font-family: "Google Sans Flex";
+      }
+      #submitReportBtn {
+        display: block;
+        font-size: 1.5rem;
+        user-select: none;
+      }
+      #submitThanks {
+        position: absolute;
+        z-index: 700;
+        box-sizing: border-box;
+        background: #FAFAFA;
+        animation: ad_grow 0.25s forwards;
+        height: 100%;
+        aspect-ratio: 4 / 3;
+        padding: 16px;
+        user-select: none;
+        font-size: 1.75rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 2px 2px black,
+            inset 0 0 0 3px white,
+            inset 0 0 0 4px black;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        display: none;
+      }
+
+/*****************************************************************************************/
+/* AD CLOSING ITEMS */
+    #closingAd {
       position: absolute;
-      bottom: 60px;
-      right: 0;
-      padding: 10px 18px;
-      background: rgba(0, 0, 0, 0.6);
+      z-index: 600;
+      background: #FAFAFA;
+      animation: ad_grow 0.25s forwards;
+      height: 100%;
+      width: 100%;
+      user-select: none;
+      box-sizing: border-box;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 2rem;
+      box-shadow: 0 0 2px 2px black,
+            inset 0 0 0 3px white,
+            inset 0 0 0 4px black;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;      
+    }
+    #restartingAd {
+      position: absolute;
+      z-index: 2000;
+      background: #FAFAFA;
+      animation: ad_grow 0.25s forwards;
+      height: 100%;
+      width: 100%;
+      user-select: none;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 2rem;
+      box-sizing: border-box;
+      box-shadow: 0 0 2px 2px black,
+            inset 0 0 0 3px white,
+            inset 0 0 0 4px black;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;       
+    }
+    .adClose {
+      font-size: 1.5rem;
+      width: 32px;
+      height: 32px;
+      padding: 4px;
+      border-radius: 2px;
+      top: 8px;
+      left: 8px;
       border: 1px solid black;
-      border-right-width: 0;
-      font-size: 1.2rem;
-      border-radius: 4px 0 0 4px;
-      color: white;
-      cursor: pointer;
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    #countdown, #countdownClose, #countdownRestart {
+      padding-top: 32px;
+      color: #841818;
+      font-family: "Press Start 2P";
+    }
+
+/*****************************************************************************************/    
+/* HUD ITEMS */
+    #hudWrap {
+      position: absolute;
+      z-index: 200;
+      overflow: hidden;
+      background: transparent;
+      cursor: none;
+      opacity: 0;
+      padding: 16px;
+      margin: 0;
+      box-sizing: border-box;
+      border: 1px solid black;
+      top: 0;
+      left: 0;
+    }
+    #progressWrap {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #FAFAFA;
+      width: auto;
+      height: auto;
+      border: 1px solid black;
+      border-radius: 3px;
+      padding: 0 24px;
+      user-select: none;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: column;
+    }
+    #hudWrap, label {
+      font-size: 1.75rem;
+      cursor: none;
+      font-family: "Homenaje", sans-serif;
+    }
+    #progress {
+      display: inline-block;
+      width: 90%;
+      height: 24px;
+      user-select: none;
+    }
+    #progress::-webkit-meter-bar {
+      background: #222;
+    }
+    #progress::-webkit-meter-optimum-value {
+      background: var(--progress-color);
+      transition: background 0.2s linear;
+    }
+    #hitCountWrap {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      user-select: none;
+      width: auto;
+      height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #hitCountLabel {
+      border-radius: 3px;
+      background: #FAFAFA;
+      padding: 4px 24px;
+    }
+    #timer {
+       width: 2.5rem;
+       height: 2.5rem;
+       display: inline-block;
+       position: relative;
+       margin-left: 8px;
+    }
+    #titleWrap {
+      position: absolute;
+      z-index: 100;
+      overflow: hidden;
+      opacity: 1;
+      padding: 16px 0;
+      margin: 0;
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+      background: transparent;
+    }
+    .title {
+      padding: 0;
+      margin: 0;
+      opacity: 0;
+      text-align: center;
+      color: black;
+      text-align: center;
+      display: block;
+      justify-items: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .title svg {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .main {
+      font-size: 3rem;
+      animation: fade_in 0.5s forwards;
+      font-weight: bold;
+      user-select: none;
+      font-family: "Homenaje", sans-serif;
+      margin: 0 5rem;
+      padding: 16px 4px;
+      border: 1px groove black;
+      border-radius: 4px;
+      box-sizing: border-box;
+      box-shadow: 0 0 8px 4px rgb(0, 0, 0, 0.5);
+      background-color: #FAFAFA;
+    }
+    .sub {
+      font-size: 1.75rem;
+      animation: fade_in 0.5s forwards, pulse 1s infinite; 
+      padding: 8px;
+      font-weight: bold;
+      line-height: 2rem;
+      margin: 1rem 5rem;
+      user-select: none;
+      font-family: "Press Start 2P";
+      letter-spacing: 1px;
+      color: #E0BB20;
+      text-shadow:
+        0 0 5px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(0, 0, 0, 0.589),
+        0 0 30px rgba(5, 5, 5, 0.747);
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 50%;
+    }
+    .enemySub {
+      position: absolute;
+      padding: 0;
+      margin: 0;
+      font-family: "Press Start 2P";
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #E0BB20;
+      font-size: 1.5rem;
+      animation: fade_in 0.5s forwards, rotatedPulse 1.25s ease-in-out infinite;
+      top: 32px;
+      left: 35%;
+      user-select: none;
+      text-shadow:
+        0 0 5px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(0, 0, 0, 0.589),
+        0 0 30px rgba(5, 5, 5, 0.747);
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 50%;
+    }
+
+/*****************************************************************************************/
+/* GLOBAL CLASSES */
+    .disabled {
+      pointer-events: none;
+      text-decoration: line-through;
+    }
+    .fadeOut {
+      animation: fade_out 0.5s forwards;
+    }
+    .fadeIn {
+      animation: fade_in 0.5s forwards;
+    }
+    .underline {
+      text-decoration: underline;
+    }
+    .bcgFade {
+      animation: bcg_fade 1s forwards;
+    }
+    .contained {
+      width: 100%;
+      height: 100%;
+    }
+
+/*****************************************************************************************/
+  /* GLOBAL KEYFRAMES */    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    @keyframes rotatedPulse {
+      0% {
+        transform: rotate(-3deg) scale(1);
+      }
+      50% {
+        transform: rotate(3deg) scale(1.05);
+      }
+      100% {
+        transform: rotate(-3deg) scale(1);
+      }
+    }
+    @keyframes ad_grow {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+    @keyframes fade_in {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    @keyframes fade_out {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    } 
+    @keyframes bcg_fade {
+      0% {
+        background-color: rgba(0, 0, 0, 0);
+      }
+      100% {
+        background-color: rgba(0, 0, 0, 0.8);
+      }
     }
   </style>
 </head>
-
+<!-- **************************************************************** -->
 <body>
-  <div id="overlay-container">
-    <!-- We've added a sample button. Feel free to remove it: -->
-    <button id="skip">
-      Skip Ad...
-    </button>
+  <div id="pageWrap">
+    <!-- The actual captcha 'game' -->
+    <canvas id="captchaGame" class="contained" tabindex="0"></canvas>
+    <div id="titleWrap" class="contained"></div>
+  <!-- **************************************************************** -->
+    <div id="completeWrap" class="contained bcgFade fadeIn">
+      <div class="adWrap" id="completeInWrap">
+        <h1><span>Success!</span><br><br>Clearly you are a human.<br><br>Please help us continue making captchas a more enjoyable experience and leave a rating!</h1>
+        <div id="ratingWrap">
+          <h3>Rate this captcha</h3>
+          <div id="ratingWrapStarWrapFinish">
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+          </div>
+          <h6 id="ratingSubtitleFinish"></h6>
+        </div>
+        <div id="finishBtnsWrap">
+          <button class="adWrapBtns" id="restartBtn3" title="Click to play again">Play again</button>
+          <button class="adWrapBtns" id="quitBtn2" title="Click to finish">Done</button>
+        </div>
+      </div>
+    </div>
+  <!-- **************************************************************** -->
+    <div id="adPopWrap" class="contained bcgFade fadeIn">
+      <!-- ****************** -->
+      <div class="adWrap" id="incompleteWrap">
+        <h1><span>Uh-oh</span><br><br>Looks like you didn't complete our verification..<br>Please verify again or try another captcha</h1>
+        <div id="incBtnsWrap">
+          <button class="adWrapBtns" id="restartBtn2" title="Click to restart">Restart</button>
+          <button class="adWrapBtns" id="quitBtn" title="Click to try another captcha">Try another captcha</button>
+        </div>
+      </div>
+      <!-- ****************** -->
+      <div class="adWrap" id="reportWrap">
+        <button class="adClose" id="adc1" title="Close">X</button>
+        <h3 id="reportTitle">Please help us make captchas a more enjoyable experience. Provide us with your feedback.</h3>
+
+        <div id="reportBtnsWrap">
+          <input type="radio" id="report1" name="report" value="confusing">
+          <label for="report1">It's too confusing</label><br>
+
+          <input type="radio" id="report2" name="report" value="tooLong">
+          <label for="report2">The captcha does not work</label><br>
+
+          <input type="radio" id="report3" name="report" value="un-appealing">
+          <label for="report3">It's visually un-appealing</label><br>
+
+          <input type="radio" id="report4" name="report" value="AI">
+          <label for="report4">A computer AI could easily solve this</label><br>
+
+          <input type="radio" id="report5" name="report" value="tooMuch">
+          <label for="report5">It's just too much</label><br>
+
+          <input type="radio" id="report6" name="report" value="like">
+          <label for="report6">I actually like it</label><br>
+
+          <input type="radio" id="report7" name="report" value="custom">
+          <label for="report7">Custom (ex. I'm bad at games)</label><br>
+        </div>
+        <div id="customReportBox">
+          <input id ="reportBox" type="text" placeholder="Please enter your feedback (ex. I'm not very smart)"></input>
+        </div>
+        <div id="reportSubmitBtnsWrap">
+          <button class="adWrapBtns" id="cancelReportBtn" title="Click to cancel report">Cancel</button>
+          <button class="adWrapBtns" id="submitReportBtn">Submit Report</button>
+        </div>
+      <!-- ****************** -->
+        <div id="submitThanks"><h3>Thanks for your feedback! We're sorry you're not enjoying yourself. But we still need you to verify you're human.. continuing in.. <br><span id="countdown"></span></h3></div>
+      </div>
+      <div class="adWrap" id="adPopWrapInside">
+        <button class="adClose" id="adc2" title="Close">X</button>
+
+        <h3 id="funFact"></h3>
+
+        <div id="ratingWrap">
+          <h3>Rate this captcha</h3>
+          <div id="ratingWrapStarWrap">
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+          </div>
+          <h6 id="ratingSubtitle"></h6>
+        </div>
+
+        <div id="adWrapBtnsWrap">
+          <button class="adWrapBtns" id="restartBtn" title="Click to restart">Restart</button>
+          <button class="adWrapBtns" id="reportBtn" title="Click to submit a report">Report Captcha</button>
+          <button class="adWrapBtns" id="continueBtn" title="Click to continue">Continue</button>
+        </div>
+
+        <div id="closingAd"><h3>continuing in.. <span id="countdownClose"></span></h3></div>
+        <div id="restartingAd"><h3>Restarting in.. <span id="countdownRestart"></span></h3></div>
+
+      </div>
+    </div>
+  <!-- **************************************************************** -->
+    <div id="hudWrap" class="contained">
+      <div id="hitCountWrap">
+        <label id="hitCountLabel">Ads disabled: 0</label>
+        <svg id="timer" viewBox="0 0 100 100">
+          <!-- background circle -->
+          <circle cx="50" cy="50" r="45" fill="rgba(0,0,0,0.4)" />
+          <!-- progress wedge -->
+          <path id="progressCircle" fill="white"></path>
+          <!-- text -->
+          <text id="timerText" x="50" y="65" text-anchor="middle" font-size="50" fill="#841818"></text>
+        </svg>
+      </div>
+    <!-- ****************** -->
+      <div id="progressWrap">
+        <label for="progress">Skip progress</label>
+        <meter id="progress" value="0" max="1"></meter>
+      </div>
+    </div>
   </div>
 
   <script type="text/javascript">
     (function(window, document){
       // This is how you tell the parent window that the ad was successfully skipped.
-      function adSuccess() {
+      window.adSuccess = function () {
         window.top.postMessage({ type: 'success' }, '*');
-      }
-
-      const skipButton = document.getElementById('skip');
+      };
 
       // Listen for messages from the game shell
-      window.addEventListener('message', (event) => {
+      window.addEventListener('message', async (event) => {
         if (!event.data || !event.data.type) return;
 
-        if (event.data.type === 'adStarted') {
-          // Show the skip button when the ad starts
-          skipButton.style.display = 'block';
+        const data = event.data;
+
+        // get the videos duration
+        if (event.data.type === "timeupdate") {
+          if (!captcha.vars.videoDuration) {
+            captcha.vars.videoDuration = data.duration;
+            //console.log(data.duration);
+          }
         }
 
+        // if the data recieved is of "timeupdate"
+        if (event.data.type === "timeupdate") {
+          if (!captcha.vars.videoTimer) {
+            captcha.vars.videoTimer = document.getElementById("progressCircle");
+          }
+          if (!captcha.vars.videoDuration) {
+            captcha.vars.videoDuration = data.duration;
+          }
+          if (!captcha.vars.timeLeft) {
+            captcha.vars.timeLeft = Math.round(data.duration - data.currentTime); 
+          }
+
+          // update the time
+          captcha.vars.timeLeft = Math.round(data.duration - data.currentTime); 
+
+          // update video progress
+          captcha.vars.videoProgress = data.currentTime / captcha.vars.videoDuration;
+
+          captcha.vars.videoTimer.setAttribute(
+            "d",
+            describeArc(50, 50, 45, captcha.vars.videoProgress)
+          );
+        }
+
+        // if the data recieved is of "adStarted"
+        if (event.data.type === 'adStarted') {
+          // wait for the canvas to be set
+          if (!canvasItems.initialized) {
+            canvasItems.initialized = true;
+              // wait for set canvas to respond with true or false
+              const result = await setCanvas();
+              // if setCanvas returns false or undefined, exit, something went wrong
+              // that shouldn't really happen I think
+              if (!result) {
+                console.log("Canvas could not be initialized");
+                alert("Something unexpected has occured");
+                return;
+              }
+              // runs on initial game start
+              if (!captcha.started) {
+                captcha.started = true;
+                captcha.vars.currStage = "intro";
+
+                // if setCanvas returns true and captcha hasnt started already
+                // start the captcha
+                captchaCheck();
+                // located at the bottom of the page
+              }
+          }
+          // Show the skip button when the ad starts
+        }
         // By default, if the user doesn't "skip" the ad before the video ends,
         // we call fail to restart. You're welcome to replace this with a survey
         // or other interaction instead (see examples/survey).
         if (event.data.type === 'adFinished') {
-          skipButton.style.display = 'none';
-          window.top.postMessage({ type: 'fail' }, '*');
+
+          // if this is not assigned yet
+          if (!captcha.vars.adPopDiv) captcha.vars.adPopDiv = document.getElementById("adPopWrap");
+
+          // pause the game in the background
+          captcha.paused = true;
+
+          const incWrap = document.getElementById("incompleteWrap");
+          incWrap.style.display = 'flex';
+
+          // this holds all the popups unfortunately
+          // this is coded so badly | at the end here so in retrospect I see the horidness
+          captcha.vars.adPopDiv.style.display = 'flex';
+
+          // add to the quit button the call to fail
+          const quitBtn = document.getElementById("quitBtn");
+          quitBtn.addEventListener('click', () => {
+            window.top.postMessage({ type: 'fail' }, '*');
+          }, { once: true });
+
+          // to restart the game if wanted
+          const restartBtn = document.getElementById("restartBtn2");
+          restartBtn.addEventListener('click', () => {
+
+            incWrap.style.display = 'none';
+
+            // I realize my typo.. I'm not going to fix it. It is way to late. I'm sure there is an easy way i'm not aware of
+            if (!captcha.vars.retartScreen) captcha.vars.retartScreen = document.getElementById("countdownRestart");
+
+            // if in the report menu, close it
+            if (captcha.vars.repScreen) {
+              if (captcha.vars.repScreen.style.display === 'block') {
+                captcha.vars.repScreen.style.display = 'none';
+              }
+            }
+            
+            let id = "restart";
+            const retartingAdDiv = document.getElementById("restartingAd");
+            retartingAdDiv.style.display = 'flex';
+            countdown(3, captcha.vars.retartScreen, id);
+
+            setTimeout(() => {
+              // if the restarting ad screen is open, close it
+              if (document.getElementById("restartingAd").style.display === 'flex') document.getElementById("restartingAd").style.display = 'none';
+              // if the closing ad screen is open, close it
+              if (document.getElementById("closingAd").style.display === 'flex') document.getElementById("closingAd").style.display = 'none';
+              // if the report screen is open, close it
+              if (captcha.vars.repScreen) {
+                if (captcha.vars.repScreen.style.display === 'flex') {
+                  captcha.vars.repScreen.style.display = 'none';
+                }
+              }
+              const html = document.documentElement;
+              const body = document.body;
+              html.style.cursor = "none";
+              body.style.cursor = "none";
+              captcha.paused = false;
+              captcha.vars.adPopDiv.style.display = 'none';
+              restartCaptcha();
+            }, 3500);
+          }, { once: true });
         }
       });
+    })(window, document);
 
-      // Your ad overlay code goes here, we've added a simple example below:
-      skipButton.addEventListener('click', () => {
-        skipButton.style.display = 'none';
+/************************************************************************************
+ ***                                                                              ***
+***                          ALL GLOBAL FUNCTIONS                                 ***
+***                        BELOW HERE | IN 'GLOBAL'                               ***
+***                                                                               ***
+***                         CHANGE AT YOUR DESIRE ( RISK! )                       ***
+***                                                                               ***
+***                      Creator: Swangmane (twitch ID)                           ***
+***                                                                               ***
+***             Been watching Kit since 2020. I remember                          ***
+***             working at a theatre and walking around with airpods              ***
+***             listening to the entire Joe Biden saga. Some of                   ***
+***             the best content out there.                                       ***
+***                                                                               ***
+***             Thank you for the countless hours of entertainment, genuinely.    ***
+***             Times are tough right now, in my opinion. Content                 ***
+***             like yours helps us all get through our monotonous days.          ***
+***                                                                               ***
+***             Huge thank you to the team behind the scenes as well!             ***
+***                                                                               ***
+***                                                                               ***
+***            THIS CODE IS REALLY, REALLY BAD. THIS DOES NOT REPRESENT ME        ***
+***            I learned a ton while working on this. I'm super excited to        ***
+***            start work on a more proper project now.                           ***
+***                                                                               ***
+***            Thank you for setting this up! Hope you enjoy.                     ***
+***                                                                               ***
+***                                                                               ***
+*************************************************************************************/
+
+    // EDITABLE ATTRIBUTES
+    const global = {
+      // titles
+        introTitle: "Reach the top to skip the ad!",                      // Main title once player descends
+        introSubTitle: `Use WASD + SPACE<br>or<br>ARROW Keys to move`,    // Sub-title once player descends 
+        introEnemy: `* Avoid those<br>pesky ads! *`,                      // enemy 'altert' title once player begins 'playing'
+
+      // player settings
+        playerInitFallSpeed: 1.5,   // 1.5 default | Higher = faster
+        playerJumpHeight: 5,        // 5 default 
+        playerMoveSpeed: 5,         // 5 default
+        playerBcgGlowLoops: 2,      // 2 default | amount of times the players glow is looped for stronger glow affect
+
+      // enemy settings 
+        enemyBcgGlowLoops: 5,     // 5 default | amount of times the enemies glow is looped for stronger glow affect
+        enemySpawnChance: 1000,   // random number generator, if number = this, spawn enemy. Higher = lower chances
+        EnemySpawnLimiter: 2000,  // 2000 default | aka 2 seconds
+
+      //variables
+        gravity: 0.2,             // 0.2 default | feels like normal gravity
+        secondsPerPlatform: 2,    // 1 platform per 2 seconds of video is default | scales with the duration of the video | can use decimals
+        groundSpawnHeight: 16,    // initial ground spawn height | platforms spawn off this 
+        platformSpawnSeperation: Math.random() * (60 - 45) + 45,  // Random number for platform seperation. Forgot to add the players max
+                                                                  // jump height into this type of calc. So play with your own risk. 
+                                                                  // 60 = MAX | 45 = MIN | Default
+
+      // random facts
+      // feel free to add any
+      // just follow the template provied 
+
+      // `<span class="question"> random question statement here </span><br><span class="fact"> fact or statement here </span>`
+
+        randomFacts: [
+          `<span class="question">Did you know?</span><br><span class="fact">Crows can recognize individual human faces and remember them for years. If a human acts as a threat, crows will scold and dive-bomb that specific person, even passing the information to other crows who have never seen the person before.</span>`,
+          `<span class="question">Did you know?</span><br><span class="fact">When a crow dies, others may gather around the body, holding a "funeral" (or vigil). It is believed they do this to assess potential dangers.</span>`,
+          `<span class="question">Did you know?</span><br><span class="fact">Crows are playful animals that have been observed sliding down snowy roofs, playing "catch" with objects, and engaging in aerial acrobatics.</span>`,
+          `<span class="question">Did you know?</span><br><span class="fact">North Dakota is known for a lot of things, but we doubt you would have guessed that it is the capital of bean production in the United States.</span>`,
+          `<span class="question">Fun fact:</span><br><span class="fact">Many German toilets feature a "continental shelf" allowing users to inspect waste before flushing.</span>`,
+          `<span class="question">Fun fact:</span><br><span class="fact">The average person spends about 3 years on the toilet in their lifetime, using it roughly 2,500 times a year</span>`,
+          `<span class="question">Lookout for:</span><br><span class="fact">Scammers often pose as bank employees or police, warning that your account is compromised and urging you to move funds to a "safe account" (which they control).</span>`,
+          `<span class="question">Be aware:</span><br><span class="fact">Any request to pay a debt, fine, or purchase using gift cards is a scam.</span>`,
+          `<span class="question">Fun fact:</span><br><span class="fact">There is a 1 in 6,550 chance of being injured by a toilet.</span>`,
+          `<span class="question">Just so you know:</span><br><span class="fact">Joe Biden will not call you asking for crypto.</span>`,
+          `<span class="question">Did you know?</span><br><span class="fact">A falconer refers to a person who trains birds of prey. A crow pro is someone who is a pro with a crow.</span>`,
+          `<span class="question">Be on the lookout:</span><br><span class="fact">Caller ID and email addresses can be faked (spoofed) to make it look like a trusted company or government agency is calling.</span>`,
+        ]
+    }
+
+    // END EDITABLE ATTRIBUTES
+    // CAN PLAY WITH SOME BELOW IN 'CAPTCHA' BUT BE AWARE
+    
+/**********************************************************************************************************************************************/
+
+    // setting variable here for later
+    let deltaTime; // initial starting time. using this to stabalize accross all platforms
+
+    // All global items will be found under here
+    // this includes canvas stuff, player stuff, items, variables
+    const canvasItems = {
+      canvas: null, // the HTML canvas element
+      ctx: null,  // 2d game
+      width: 0, // actual element width | not CSS width
+      height: 0,  // actual element height | not CSS height
+      initialized: false, // canvas initialization 
+      camera: {
+        y: 0,
+      },
+    }
+
+    // All things inside the captcha
+    // keeping images as SVG files to prevent extra folders
+    const captcha = {
+      // game start
+      started: false,
+      paused: false,
+      // all global veriables
+      vars: {
+        gravity: global.gravity, // 0.2 feels good
+        currStage: "",
+        titleDiv: null,
+        lastTime: 0,
+        adPopDiv: null,
+        progressBar: null,
+        videoPlayer: null,
+        starDiv: null,
+        rating: null, 
+        videoDuration: null,            // GOD THIS IS ALL SO NASTY OOOOPS
+        videoProgress: null,
+        videoTimer: null,
+        repScreen: null,
+        reportSubmited: false,
+        countdownSpan: null,
+        closescreen: null,
+        retartScreen: null,
+        activeAd: null,
+        timeLeft: null,
+        finishScreen: null,
+      },
+      // various items to call
+      misc: {
+        // 'DANGEROUS' SVG image 
+        closeImg: `<svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="200 -900 720 720" width="48px" fill="#000000"><path d="M327.61-114.02 114.02-327.61v-305.02l213.59-213.59h305.02l213.59 213.59v305.02L632.63-114.02H327.61Zm30.35-200.02L480-436.09l122.04 122.05 44.16-43.92L523.91-480 646.2-602.04l-44.16-44.16L480-523.91 357.96-646.2l-43.92 44.16L436.09-480 314.04-357.96l43.92 43.92Z"/></svg>`,
+        upArrows: `<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" height="30.3155" viewBox="0 -960 561.23001 606.31001" width="28.061501" fill="#000000" version="1.1" id="svg1" sodipodi:docname="arrow_shape_up_stack_64dp_000000_FILL0_wght200_GRAD0_opsz48.svg" inkscape:version="1.4.3 (0d15f75, 2025-12-25)">
+                    <defs id="defs1"/>
+                    <sodipodi:namedview id="namedview1" pagecolor="#505050" bordercolor="#eeeeee" borderopacity="1" inkscape:showpageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#505050" inkscape:zoom="16.8125" inkscape:cx="14.007435" inkscape:cy="16.327138" inkscape:window-width="1920" inkscape:window-height="1009" inkscape:window-x="3832" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg1"/>
+                    <path d="M 179.92,-353.69 V -474.61 H 0.23 l 280,-292.23 280,292.23 H 380.31 v 120.92 z m 30.77,-30 H 349.54 V -505.38 H 485.85 L 280.23,-720.92 75.38,-505.38 H 210.69 Z M 0,-667.54 280.23,-960 l 281,292.46 h -44 L 280.23,-914.61 44,-667.54 Z m 280.23,162.16 z" id="path1"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="M 10.557621,25.725403 V 22.69244 L 7.2201583,22.677075 3.8826957,22.66171 8.9130624,17.36803 c 2.7667016,-2.911524 5.0611956,-5.293681 5.0988756,-5.293681 0.03768,0 2.340522,2.382157 5.117429,5.293681 l 5.048921,5.29368 -3.36052,0.01536 -3.360519,0.01536 v 3.032966 3.032966 h -3.449814 -3.449814 z" id="path2" transform="matrix(20,0,0,20,0,-960)"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="" id="path3" transform="matrix(20,0,0,20,0,-960)"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="M 9.0111524,27.271375 V 24.237918 H 4.5493931 0.08763371 L 7.0273428,16.996283 c 3.8168402,-3.9829 6.9599352,-7.2416362 6.9846562,-7.2416362 0.02472,0 3.161154,3.2520442 6.969853,7.2267662 l 6.924908,7.226765 -4.451521,0.01525 -4.451522,0.01525 v 3.033081 3.033081 H 14.007435 9.0111524 Z m 8.5055766,-1.486988 v -3.033458 h 3.395291 c 1.86741,0 3.386369,-0.02248 3.375464,-0.04996 -0.03578,-0.09016 -10.225322,-10.745584 -10.275756,-10.745584 -0.05326,0 -10.1921416,10.650496 -10.224863,10.740814 -0.011921,0.0329 1.3222362,0.05472 3.345725,0.05472 h 3.365551 v 3.033458 3.033457 h 3.509294 3.509294 z" id="path4" transform="matrix(20,0,0,20,0,-960)"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="m 9.0111524,27.271752 v -3.033081 l -4.45043,-0.01525 -4.45043004,-0.01525 4.13252224,-4.312267 C 12.704832,11.065835 13.968246,9.7546468 14.014571,9.7546468 c 0.02609,0 3.1639,3.2520442 6.972909,7.2267662 l 6.92547,7.226765 -4.454616,0.01525 -4.454617,0.01525 v 3.033081 3.033081 H 14.007435 9.0111524 Z m 8.5055766,-1.487365 v -3.033458 h 3.393707 c 3.290024,0 3.391333,-0.0034 3.315985,-0.110008 -0.04275,-0.0605 -2.272518,-2.404261 -4.955046,-5.208348 -2.682527,-2.804087 -4.961215,-5.191148 -5.06375,-5.30458 l -0.186426,-0.20624 -1.270823,1.325448 c -2.640687,2.754196 -8.9444969,9.401074 -8.963511,9.451328 -0.011287,0.02983 1.4297892,0.0524 3.345725,0.0524 h 3.365551 v 3.033458 3.033457 h 3.509294 3.509294 z" id="path5" transform="matrix(20,0,0,20,0,-960)"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="" id="path6" transform="matrix(20,0,0,20,0,-960)"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="m 10.557621,25.733635 v -3.02473 l -0.455071,-0.03847 c -0.2502889,-0.02116 -1.7224078,-0.03847 -3.2713755,-0.03847 -1.5489675,0 -2.8163046,-0.01506 -2.8163046,-0.03346 0,-0.05271 9.2269041,-9.728588 9.7781611,-10.253959 l 0.215772,-0.205639 0.36172,0.354338 c 0.498157,0.487992 3.837373,3.957257 7.039295,7.313446 l 2.667041,2.795539 -3.294935,0.03527 c -1.812214,0.01939 -3.301627,0.03947 -3.309805,0.04461 -0.0082,0.0051 -0.01487,1.374402 -0.01487,3.042803 v 3.033457 h -3.449814 -3.449814 z" id="path7" transform="matrix(20,0,0,20,0,-960)"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="m 10.557621,25.733723 v -3.024642 l -0.490707,-0.0382 c -0.269888,-0.02101 -1.7442374,-0.03836 -3.2763316,-0.03855 -1.5651461,-2e-4 -2.7769391,-0.02314 -2.7657993,-0.05235 0.032803,-0.08603 9.0035329,-9.490097 9.6792069,-10.146768 l 0.303969,-0.29542 0.391822,0.384639 c 1.134035,1.113244 9.680895,10.048697 9.645523,10.084068 -0.01281,0.01281 -1.266163,0.02864 -2.785227,0.03518 -1.519065,0.0065 -2.996136,0.02238 -3.282382,0.0352 l -0.520446,0.02332 v 3.029087 3.029087 h -3.449814 -3.449814 z" id="path8" transform="matrix(20,0,0,20,0,-960)"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="M 10.557621,25.734294 V 22.710222 L 9.4774539,22.671097 C 8.883362,22.649577 7.4090126,22.63197 6.2011218,22.63197 c -1.2755706,0 -2.1878542,-0.02243 -2.1763387,-0.0535 0.032578,-0.08791 7.3515029,-7.775325 8.9954579,-9.448356 0.522359,-0.531599 0.967297,-0.966543 0.988751,-0.966543 0.05116,0 1.866688,1.843115 3.691128,3.747212 3.893237,4.06322 6.274629,6.566005 6.317705,6.639755 0.0399,0.06831 -0.343465,0.08289 -2.379182,0.09049 -1.334711,0.005 -2.453513,0.01528 -2.486227,0.02288 -0.03271,0.0076 -0.427509,0.01691 -0.877323,0.02068 l -0.817844,0.0069 v 3.033457 3.033457 h -3.449814 -3.449814 z" id="path9" transform="matrix(20,0,0,20,0,-960)"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="M 10.557621,25.724907 V 22.69145 L 9.6951673,22.68405 C 9.2208178,22.67995 8.805948,22.66992 8.7732342,22.66175 8.7405202,22.65355 7.6542751,22.64353 6.3593557,22.63945 4.9400059,22.63495 4.0128307,22.61009 4.0247831,22.57681 c 0.010905,-0.03036 0.9298637,-1.013642 2.0421314,-2.18506 5.4961725,-5.78846 7.8545985,-8.228134 7.9541155,-8.228134 0.08109,0 2.566096,2.564077 7.659267,7.902993 1.25948,1.32025 2.311368,2.437569 2.337528,2.482931 0.04002,0.0694 -0.191857,0.08248 -1.46243,0.08248 -0.830497,0 -2.317329,0.0177 -3.304071,0.03933 l -1.794075,0.03933 v 3.023866 3.023865 h -3.449814 -3.449814 z" id="path10" transform="matrix(20,0,0,20,0,-960)"/>
+                    <path style="fill:#000000;stroke:#000000;stroke-width:0.0148699" d="m 10.557621,25.734499 v -3.023866 l -1.7940757,-0.03933 c -0.9867414,-0.02163 -2.4610909,-0.03933 -3.276332,-0.03933 -0.9225933,0 -1.4747707,-0.02159 -1.4624302,-0.05718 0.036103,-0.104129 7.0472779,-7.471595 8.8481409,-9.297784 0.605857,-0.614376 1.134237,-1.109544 1.174178,-1.100371 0.08312,0.01909 1.590232,1.568146 5.372972,5.522505 4.100818,4.286867 4.639406,4.85517 4.639406,4.895377 0,0.0206 -0.397101,0.03746 -0.882446,0.03746 -0.485345,0 -1.970847,0.01774 -3.301115,0.03941 l -2.41867,0.03941 v 3.023784 3.023784 h -3.449814 -3.449814 z" id="path11" transform="matrix(20,0,0,20,0,-960)"/>
+                  </svg>`,
+        finishFlag:`<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" height="31.666666" viewBox="0 -960 639.99998 759.99998" width="26.666666" fill="#000000" version="1.1" id="svg1" sodipodi:docname="flag_2_40dp_000000_FILL0_wght400_GRAD0_opsz40.svg" inkscape:version="1.4.3 (0d15f75, 2025-12-25)">
+                    <defs id="defs1"/>
+                    <sodipodi:namedview id="namedview1" pagecolor="#505050" bordercolor="#eeeeee" borderopacity="1" inkscape:showpageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#505050" inkscape:zoom="20.175" inkscape:cx="11.672862" inkscape:cy="14.993804" inkscape:window-width="1920" inkscape:window-height="1009" inkscape:window-x="3832" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg1"/>
+                    <path d="M 0,-200 V -960 H 640 L 552.67,-764 640,-568 H 66.67 v 368 z m 66.67,-434.67 h 470.66 l -58,-129.33 58,-129.33 H 66.67 Z m 0,0 v -258.66 z" id="path1"/>
+                    <path style="fill:#008000;stroke-width:0.0495663" d="m 2.8004957,8.1784387 v -5.377943 h 9.7645603 c 5.370508,0 9.76456,0.00971 9.76456,0.021588 0,0.011873 -0.536976,1.2191635 -1.193278,2.6828671 l -1.193279,2.6612793 1.193279,2.6618999 c 0.656302,1.464044 1.193278,2.676829 1.193278,2.695075 0,0.01825 -4.394052,0.03318 -9.76456,0.03318 H 2.8004957 Z" id="path2" transform="matrix(24,0,0,24,0,-960)"/>
+                    <path style="fill:#008000;stroke-width:0.0495663" d="M 2.8004957,8.1779727 V 2.7847903 l 9.7263513,0.035732 c 5.349493,0.019653 9.732136,0.041518 9.739208,0.048589 0.0071,0.00707 -0.518873,1.2021376 -1.168764,2.6557034 l -1.181619,2.642847 0.369099,0.8232327 c 1.250086,2.7881726 1.997744,4.4803876 1.985066,4.4929076 -0.008,0.0079 -4.391894,0.03081 -9.741956,0.05087 l -9.7273853,0.03648 z" id="path3" transform="matrix(24,0,0,24,0,-960)"/>
+                    </svg>` 
+                },
+      // all stages and their components
+      // horrible design, never even used this
+      stages: {
+        intro: {
+          status: false,
+          getTitle() {
+            return global.introTitle;
+          },
+          subTitle: global.introSubTitle,
+          enemyTitle: global.introEnemy,
+          enemyTitleActive: false,
+        },
+        middle: {
+
+        },
+        finish: {
+
+        }, 
+      },
+      // all player elements
+      player: {
+        player: null, 
+        // 'POINTER' SVG image
+        image: `<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" height="33.222084" viewBox="0 -960 560.00002 797.33002" width="23.333334" fill="#000000" version="1.1" id="svg1" sodipodi:docname="arrow_selector_tool_40dp_000000_FILL1_wght400_GRAD0_opsz40.svg" inkscape:version="1.4.3 (0d15f75, 2025-12-25)">
+                <defs id="defs1"/>
+                <sodipodi:namedview id="namedview1" pagecolor="#505050" bordercolor="#eeeeee" borderopacity="1" inkscape:showpageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#505050" inkscape:zoom="20.175" inkscape:cx="9.9876084" inkscape:cy="16.679058" inkscape:window-width="1920" inkscape:window-height="1009" inkscape:window-x="3832" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg1"/>
+                <path d="M 317,-162.67 170,-478 0,-240 v -720 l 560,440 H 268.67 l 144.66,312.33 z" id="path1"/>
+                </svg>`,
+        hitCount: 0,
+        startY: null,
+      },
+      // all ad enemy elements
+      enemy_ad: {
+        image:  `<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" height="36" viewBox="0 -960 720 720" width="36" fill="#000000" version="1.1" id="svg1" sodipodi:docname="ad_64dp_000000_FILL0_wght400_GRAD0_opsz48.svg" inkscape:version="1.4.3 (0d15f75, 2025-12-25)">
+                <defs id="defs1"/>
+                <sodipodi:namedview id="namedview1" pagecolor="#505050" bordercolor="#eeeeee" borderopacity="1" inkscape:showpageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#505050" showgrid="false" inkscape:zoom="16.8125" inkscape:cx="17.992565" inkscape:cy="17.992565" inkscape:window-width="1920" inkscape:window-height="1009" inkscape:window-x="3832" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg1"/>
+                <path d="m 60,-240 q -24,0 -42,-18 -18,-18 -18,-42 v -600 q 0,-24 18,-42 18,-18 42,-18 h 600 q 24,0 42,18 18,18 18,42 v 600 q 0,24 -18,42 -18,18 -42,18 z m 0,-60 H 660 V -803 H 60 Z" id="path1"/>
+                <path style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:0.297398" d="M 60.223048,-551.22676 V -802.23048 H 360 659.77696 v 251.00372 251.00372 H 360 60.223048 Z" id="path2"/>
+                <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:293.334px;font-family:Dubai;-inkscape-font-specification:'Dubai Bold';writing-mode:lr-tb;direction:ltr;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:5" x="163.12268" y="-461.41266" id="text2"><tspan sodipodi:role="line" id="tspan2" style="fill:#000000;fill-opacity:1;stroke-width:5" x="163.12268" y="-461.41266">AD</tspan></text>
+                </svg>`,
+        array: [],
+        initSpawn: -100,  // the height the player needs to reach to start spawning enemies
+        spawning: false, // initial state of the enemies | start spawning after player reaches certain height
+        spawnChance: global.enemySpawnChance, // random number generator, if number = this, spawn enemy. Higher = lower chances
+        lastEnemySpawn: 0,
+        spawnLimiter: global.EnemySpawnLimiter, // 1500 default || 1.5 seconds between
+      },
+      // all platform elements
+      platforms: {
+        array: [],
+        max: null,
+      },
+      ground: {
+        ground: null,
+      }
+    }
+
+  // to detect which key is pressed
+    const keys = {
+      right: { pressed: false }, 	// D (key)
+      left: { pressed: false },	// A (key)
+      down: { pressed: false },	// S (key)
+      up: { pressed: false },	// SPACE (key)
+      rightMouse: { pressed: false }, // not in use currently
+      leftMouse: { pressed: false },  // not in use currently
+      escape: { pressed: false }, // for leaving ad pop-ups
+    }
+
+  // sets up the captcha 'game' keys
+    function setupControls() {
+      // when the key is pressed
+      window.addEventListener('keydown', ({ key }) => {		
+        switch (key) {		
+          case "a":
+          case "A":
+          case "ArrowLeft":
+            keys.left.pressed = true;
+            break;
+          case "d":
+          case "D":
+          case "ArrowRight":
+            keys.right.pressed = true;
+            break;
+          case "s":
+          case "S":
+          case "ArrowDown":
+            keys.down.pressed = true;
+            break;				
+          case "w":
+          case "W":
+          case " ":
+          case "Spacebar":
+          case "ArrowUp":
+            keys.up.pressed = true;
+            captcha.player.player.jump();
+            break;
+          case "Escape":
+            keys.escape.pressed = true;
+            break;
+        }
+      })
+      // for when the key is released
+      window.addEventListener('keyup', ({ key }) => {		
+        switch (key) {		
+          case "a":
+          case "A":
+          case "ArrowLeft":
+            keys.left.pressed = false;
+            break;
+          case "d":
+          case "D":
+          case "ArrowRight":
+            keys.right.pressed = false;
+            break;
+          case "s":
+          case "S":
+          case "ArrowDown":
+            keys.down.pressed = false;
+            break;
+          case "w":
+          case "W":
+          case " ":
+          case "Spacebar":
+          case "ArrowUp":
+            keys.up.pressed = false;
+            break;
+          case "Escape":
+            keys.escape.pressed = false;
+            break;
+        }
+      })
+    };
+    
+  // player class
+  // controls all player aspects
+    class Player {
+      constructor() {
+        this.height = 12;
+        this.width = 8;
+        this.position = { // players initial starting position
+            x: (canvasItems.width / 2) - (this.width / 2),
+            y: 0 - this.height,
+        };
+        this.velocity = { // players initial velocities
+          x: 0,
+          y: 0,
+        };
+        this.jumpHeight = global.playerJumpHeight;
+        this.moveSpeed = global.playerMoveSpeed;
+        this.angelSpeed = global.playerInitFallSpeed;
+        this.firstTouch = false; // used for the first platform touch
+        this.introFall = false;
+        this.intro = false;
+        this.onGround = false;
+        this.img = new Image();
+        this.img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(captcha.player.image); // converting SVG to image inline to avoid adding image folders
+        this.loaded = false;
+        this.img.onload = () => {
+          this.loaded = true;
+        }
+      }
+      draw() {
+        // loads the image initially
+        if (!this.loaded) return;
+
+        const ctx = canvasItems.ctx;
+
+        const x = this.position.x;
+        const y = this.position.y - canvasItems.camera.y;
+
+        ctx.save();
+        const gradx = this.position.x + (this.width / 2);
+        const grady = this.position.y + (this.height / 2) - canvasItems.camera.y;
+        const radius = this.height + (this.height / 2);
+
+        // gradiants to the players glow
+        // trying to help it stand out more
+        const gradient = ctx.createRadialGradient(
+          gradx, grady, 0,        // inner circle (center, radius 0)
+          gradx, grady, radius    // outer circle
+        );
+
+        // add gradiants in a faded target shape
+        gradient.addColorStop(0, "rgba(255, 255, 255, 1)");   // center solid
+        gradient.addColorStop(0.7, "rgba(255, 255, 255, 0.5)"); // still transparent
+        gradient.addColorStop(1, "rgba(255, 255, 255, 0)");   // edges fade to transparent
+
+        ctx.fillStyle = gradient;
+
+        // draw each arc
+        ctx.beginPath();
+        ctx.arc(gradx, grady, radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.save();
+
+        ctx.drawImage(this.img, x, y, this.width, this.height);
+
+        ctx.restore();
+      }
+      // called each frame
+      // deltaTime stuff found in main captchaLoop. lastTime found in captcha.vars
+      update(deltaTime) {
+        this.draw();
+
+        // if the player is not in the intro
+        // gravity 
+        if (captcha.vars.currStage !== "intro") {
+        // update velocity based on gravity
+          this.velocity.y += captcha.vars.gravity * deltaTime * 60;
+          // update player position based on velocity
+          this.position.y += this.velocity.y * deltaTime * 60;
+        }
+        // if the player is in the intro stage
+        // fall at a constant rate 
+        else if (!this.introFall) {
+          this.position.y += this.angelSpeed * deltaTime * 60;
+          // once the player reaches a 1/3 of the way down, trigger stages
+          if (this.position.y + this.height > canvasItems.height / 3 && !this.intro) {
+            this.intro = true;
+            stages();
+          }
+          // once the player icon reaches the ground
+          // land on it and start next stage
+          if (captcha.ground.ground && this.position.y + this.height + this.angelSpeed >= captcha.ground.ground.position.y) {
+            this.position.y = captcha.ground.ground.position.y - this.height;
+            this.onGround = true;
+            this.introFall = true;
+            captcha.vars.currStage = "middle";
+          }
+        }
+        
+        // default grounding state
+        this.onGround = false;
+
+        // all platform collisions
+        // stops looping once collision is detected to save memory
+        for (let i = 0; i < captcha.platforms.array.length; i++) {
+          const platform = captcha.platforms.array[i];
+          // if the player is on top and falling
+          if (
+            collisionChecker(this, platform) &&
+            this.velocity.y > 0 &&
+            this.position.y + this.height - this.velocity.y * deltaTime * 60 <= platform.position.y + 1
+          ) {
+            this.velocity.y = 0;
+            this.position.y = platform.position.y - this.height;
+            this.onGround = true;
+            // if the player has not touched a platform yet
+            if (!this.firstTouch) {
+              this.firstTouch = true;
+            }
+/* END GOAL END GOAL END GOAL END GOAL END GOAL */
+            // if the platform the player touches is the last
+            // end the captcha
+            if (platform.finishPlatform) {
+              captchaComplete();
+            }
+            break; // stop after first cofirmed valid platform
+          }
+        }
+        // ground detection
+        if (captcha.ground.ground && 
+            collisionChecker(this, captcha.ground.ground) && 
+            this.velocity.y > 0 && 
+            this.position.y + this.height - this.velocity.y * deltaTime * 60 <= captcha.ground.ground.position.y) {
+              this.velocity.y = 0;
+              this.position.y = captcha.ground.ground.position.y - this.height;
+              this.onGround = true;
+            }
+        // bottom of canvas detection
+        if (this.position.y - this.height >= canvasItems.height) {
+          // shoots the player back up a random amount 
+          this.velocity.y = Math.random() * 5 - 10; 
+        }
+
+        // left horizontal movement
+        if (keys.left.pressed && this.position.x > 0) {
+          this.position.x -= this.moveSpeed * deltaTime * 60;
+        }
+        // right horizontal movement
+        if (keys.right.pressed && this.position.x + this.width < canvasItems.width) {
+          this.position.x += this.moveSpeed * deltaTime * 60;
+        }
+
+        // downward movement
+        if (keys.down.pressed && this.onGround) {
+          this.position.y = this.position.y + 2;
+        }
+      }
+      // when jump is called
+      // SPACE BAR | W | UP ARROW
+      jump() {
+        if (this.onGround) {
+          this.velocity.y = -5;
+        }
+      }
+    }
+
+    // the flying ad enemy
+    class Enemy_ad {
+      constructor(y) {
+        this.moveSpeed = this.leftOrRight(); // left to right movement speed
+        this.height = 12;
+        this.width = 16;
+        this.position = { // enemies initial starting position
+            x: this.moveSpeed < 0 ? canvasItems.width + (this.width * 2) : 0 - (this.width * 2),
+            y: y,
+        };
+        this.velocity = { // players initial velocities
+          x: 0,
+          y: 0,
+        };
+        this.scale = 1;
+        this.maxScale = 1.375;
+        this.scaled = false;
+        this.startY = this.position.y;
+        this.bobAngle = 0;  // current bob angle
+        this.bobHeight = Math.random() * (7.5 - 2.5) + 2.5;  // bob height + -
+        this.bobTime = 0.05;  // duration of bob cycle
+        this.img = new Image();
+        this.img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(captcha.enemy_ad.image); // converting SVG to image inline to avoid adding image folders
+        this.loaded = false;
+        this.shadowColor = "rgba(255, 255, 255, 0.75)";
+        this.hit = false;
+        this.popped = false;
+        this.img.onload = () => {
+          this.loaded = true;
+        }  
+        this.delete = false;      
+      }
+      // determines if the enemy is moving left or right
+      // - number is left, + is right
+      leftOrRight() {
+        const goingRight = Math.random() < 0.5;
+
+        const speed = Math.random() * (1.25 - 0.75) + 0.75;
+
+        return goingRight ? speed : -speed;
+      }
+      // when the flying ad is hit by the player
+      // this event triggers
+      adHit() {
+        captcha.vars.activeAd = this;
+
+        // pause the ad
+        sendToParent({ type: 'pause' });
+
+        captcha.vars.adPopDiv.style.display = 'flex';
+
+        const html = document.documentElement;
+        const body = document.body;
+
+        //enabling the pointer while ad is open
+        html.style.cursor = "pointer";
+        body.style.cursor = "pointer";
+        
+        // check if the "pesky ads" title is active
+        // if it is, delete it
+        if (captcha.stages.intro.enemyTitleActive) {
+            captcha.vars.titleDiv.classList.add('fadeOut');
+
+            // clear the title div for future use
+            setTimeout(() => {
+              captcha.vars.titleDiv.innerHTML = '';
+              captcha.vars.titleDiv.className = 'contained'
+              captcha.vars.titleDiv.style.opacity = 1;
+            }, 750);
+        }
+
+        // if the star div is not selected
+        if (!captcha.vars.starDiv) {
+          captcha.vars.starDiv = document.querySelectorAll('#ratingWrapStarWrap span');
+        }
+        else {
+          if (captcha.vars.rating)  {  
+            // if there is already a rating submited      
+            const ratingSub = document.getElementById("ratingSubtitle");
+            if (ratingSub.textContent === "") ratingSub.textContent = "(Rating automatically submitted upon completion)";
+          }
+          captcha.vars.starDiv = document.querySelectorAll('#ratingWrapStarWrap span');
+        }
+
+        // the random facts on the adWrap screens
+        const factWrap = document.getElementById("funFact");
+        const maxNum = global.randomFacts.length;
+        const randNum = Math.floor(Math.random() * maxNum);
+
+        factWrap.innerHTML = global.randomFacts[randNum];
+
+        const stars = captcha.vars.starDiv;
+
+        // to actually highlight the stars
+        function highlightStars(index) {
+          stars.forEach((s, i) => {
+            s.classList.toggle("active", i <= index);
+          });
+        }
+
+        // current star index, to highlight 1 behind
+        let currIndex = -1;
+        // star highlighting function
+        stars.forEach((star, index) => {
+
+          // hovering function
+          star.addEventListener("mouseenter", () => {
+            highlightStars(index);
+          });
+
+          // leaving the stars with the mouse
+          star.addEventListener("mouseleave", () => {
+            if (captcha.vars.rating) {
+              highlightStars(captcha.vars.rating);
+            }
+            else {
+              highlightStars(currIndex);
+            }
+          })
+
+          // lock in rating
+          star.addEventListener('click', () => {
+            currIndex = index;
+            highlightStars(currIndex);
+
+            captcha.vars.rating = index; 
+            
+            console.log(index);
+
+            const ratingSub = document.getElementById("ratingSubtitle");
+            if (ratingSub.textContent === "") ratingSub.textContent = "(Rating automatically submitted upon completion)"; 
+          })
+          if (captcha.vars.rating) {
+            highlightStars(captcha.vars.rating);
+          }
+        })
+
+        // increase addhit count by 1
+        captcha.player.hitCount++;
+
+        // create the ad menu buttons
+        const adCloseBtn = document.getElementById("adc2")
+        const contBtn = document.getElementById("continueBtn");
+        const restBtn = document.getElementById("restartBtn");
+        const repBtn = document.getElementById("reportBtn");
+
+        // btn click functions
+        repBtn.addEventListener('click', () => this.openReport());
+        adCloseBtn.addEventListener('click', () => this.closeHandler(), { once: true });
+        contBtn.addEventListener('click',  () => this.closeHandler(), { once: true });
+        restBtn.addEventListener('click', () => {
+          restartCaptcha();
+          this.restartHandler();
+        } );
+
+        // escape key 
+        document.addEventListener('keydown', (event) => {
+          if (event.key === "Escape") {
+            this.closeHandler();
+          }
+        });       
+      }
+      closeHandler() {
+        if (!captcha.vars.closescreen) captcha.vars.closescreen = document.getElementById("countdownClose");
+
+        // if in the report menu, close it
+        if (captcha.vars.repScreen) {
+          if (captcha.vars.repScreen.style.display === 'block') {
+            captcha.vars.repScreen.style.display = 'none';
+          }
+        }
+
+        // call countdown to closing ad screen
+        countdown(3, captcha.vars.closescreen);
+        const closingAdDiv = document.getElementById("closingAd");
+        closingAd.style.display = 'flex';
+
+        // close the ad
+        setTimeout(() => {
+          if (captcha.vars.activeAd) {
+            this.closeAd();
+          }
+        }, 3500);    
+      }
+      restartHandler() {
+        if (!captcha.vars.retartScreen) captcha.vars.retartScreen = document.getElementById("countdownRestart");
+
+        // if in the report menu, close it
+        if (captcha.vars.repScreen) {
+          if (captcha.vars.repScreen.style.display = 'block') {
+            captcha.vars.repScreen.style.display = 'none';
+          }
+        }
+
+        let id = "restart";
+        countdown(3, captcha.vars.retartScreen, id);
+        const retartingAdDiv = document.getElementById("restartingAd");
+        retartingAdDiv.style.display = 'flex';
+
+        setTimeout(() => {
+          if (captcha.vars.activeAd) {
+            this.closeAd();
+          }
+        }, 3500);         
+      }
+      openReport() {
+        // set the report screen
+        if (!captcha.vars.repScreen) captcha.vars.repScreen = document.getElementById("reportWrap");
+        // open the report screen
+        captcha.vars.repScreen.style.display = 'flex';
+
+        // sumbit button things
+        const submitButton = document.getElementById("submitReportBtn");
+        submitButton.disabled = true;
+
+        // cancel button 
+        const cancelSubmit = document.getElementById("cancelReportBtn")
+        cancelSubmit.addEventListener('click', () => {
+          captcha.vars.repScreen.style.display = 'none';
+        });
+
+        // set the close button 
+        const adCloseBtn = document.getElementById("adc1");
+        adCloseBtn.addEventListener('click', () => this.closeHandler(), { once: true });
+
+        // setting event listeners for each button in the report screen
+        document.querySelectorAll('input[name="report"]').forEach(radio => {
+          radio.checked = false; 
+
+          submitButton.addEventListener('click', () => this.submitReport());
+
+          // add a title to the button
+          submitButton.title = "Please select an option to report";
+
+          radio.addEventListener('change', (e) => {
+            // if the button clicked is the custom button open the custom dialogue box
+            if (e.target.value === "custom") {
+              //console.log("opening custom report box");
+              // this is the wrap to the report box
+              const reportBox = document.getElementById("customReportBox");
+              // this is the actual reportbox
+              const reportBoxActual = document.getElementById("reportBox");
+              reportBox.style.display = 'flex';
+              submitButton.title = "Text field must be filled out";
+              // listen for typing 
+              reportBoxActual.addEventListener("input", () => {
+                if (!reportBoxActual.value.trim()) {
+                  submitButton.disabled = true;
+                  submitButton.title = "Text field must be filled out";
+                } else {
+                  submitButton.disabled = false;
+                  submitButton.title = "Click to submit report";
+                }
+              });
+            }
+            else {
+              const reportBox = document.getElementById("customReportBox");
+              reportBox.style.display = 'none'; 
+              submitButton.disabled = false;
+              submitButton.title = "Click to submit report";
+            }
+          })
+        })
+      }
+      submitReport() {
+        // change report submitted to true, only allow one report
+        captcha.vars.reportSubmited = true;
+
+        const submitThanksDiv = document.getElementById("submitThanks");
+        submitThanksDiv.style.display = 'flex';
+
+        // disable the report button for future use
+        const repBtn = document.getElementById("reportBtn");
+        repBtn.classList.add('disabled');
+        repBtn.disabled = true;
+        repBtn.textContent = "Reported";
+        repBtn.title = "Report already submitted";
+
+        // start the countdown 
+        if (!captcha.vars.countdownSpan) captcha.vars.countdownSpan = document.getElementById("countdown");
+
+        countdown(5, captcha.vars.countdownSpan);
+
+        setTimeout(() => {
+          if (captcha.vars.activeAd) {
+            captcha.vars.activeAd.closeAd();
+          }
+        }, 5500);
+      }
+      // function to close the ad
+      closeAd() {
+        // play the ad if its paused
+        if (captcha.paused) sendToParent({ type: 'play' });
+        // if the restarting ad screen is open, close it
+        if (document.getElementById("restartingAd").style.display === 'flex') document.getElementById("restartingAd").style.display = 'none';
+        // if the closing ad screen is open, close it
+        if (document.getElementById("closingAd").style.display === 'flex') document.getElementById("closingAd").style.display = 'none';
+        // if the report screen is open, close it
+        if (captcha.vars.repScreen) {
+          if (captcha.vars.repScreen.style.display === 'flex') {
+            captcha.vars.repScreen.style.display = 'none';
+          }
+        }
+        
+        // update the hitcount label
+        const hitCount = document.getElementById("hitCountLabel");
+        const label = `Ads disabled: ${captcha.player.hitCount}`;
+        hitCount.textContent = label;
+        const html = document.documentElement;
+        const body = document.body;
+        html.style.cursor = "none";
+        body.style.cursor = "none";
+        captcha.paused = false;
+        // toggle popped to true
+        // popped causes the ad to 'pop'
+        this.popped = true;
+        captcha.vars.adPopDiv.style.display = 'none';
+        //console.log("ad closed");
+      }
+      draw() {
+        // loads the image initially
+        if (!this.loaded) return;
+
+        const ctx = canvasItems.ctx;
+
+        // scaling the width and height of the sprite
+        const scaledWidth = this.width * this.scale;
+        const scaledHeight = this.height * this.scale;
+
+        const x = this.position.x;
+        const y = this.position.y - canvasItems.camera.y;
+
+        // saving the current ctx state to add glow
+        ctx.save();
+          // making the stacking sprites a little lighter to blend better
+          ctx.globalCompositeOperation = "lighter";
+
+          const iterations = global.enemyBcgGlowLoops; // amount of times the shadow gets looped
+
+          // Glow settings
+          // im stacking multiple glows for a stronger affect
+          for (let i = 0; i < iterations; i++) {
+            ctx.shadowColor = this.shadowColor; // shadow color
+            ctx.shadowBlur = 10 + i * 5; // shadow strength | increases each pass
+            ctx.drawImage(this.img, x, y, scaledWidth, scaledHeight);
+          }
+        // restore so it all meshes together
+        ctx.restore();
+
+        // draw the player overtop the others
+        ctx.drawImage(this.img, x, y, scaledWidth, scaledHeight);
+      }
+      //deltaTime stuff found in main captchaLoop. lastTime found in captcha.vars
+      update(deltaTime) {
+        this.draw();
+
+        // if the enemy is (3x) its width away from edges of the screen then remove itself from the array
+        if ((this.position.x + this.width > canvasItems.width + (this.width * 3)) || (this.position.x < 0 - (this.width * 3))) {
+          this.delete = true;
+          //console.log("removing enemy");
+        }
+
+        // popping animation | if the player hits the ad this is triggered
+        // setting all things to 0 
+        if (this.popped) {
+          this.moveSpeed = 0;
+          this.bobAngle = 0;
+          this.bobHeight = 0;
+          this.bobTime = 0;
+
+          this.shadowColor = "rgb(126, 19, 19)";
+
+          // if its less then max pop scale, grow it
+          if (this.scale < this.maxScale && !this.scaled) {
+            this.scale += 0.025;
+          }
+          // if scale is larger then max, changed scaled state to true
+          else if (this.scale >= this.maxScale && !this.scaled) {
+            this.scaled = true;
+          }
+          // if scale is greater then 0, start shrinking it
+          else if (this.scaled && this.scale > 0) {
+            this.scale -= 0.075;
+          }
+          // once it reaches 0 or below, delete itself
+          else {
+            this.delete = true;
+          }
+          return;
+        }
+
+        // move the ad at a consistent rate
+        this.position.x += this.moveSpeed * deltaTime * 60;
+
+        // smooth bobbing
+        // trying to imitate a bird
+        this.bobAngle += this.bobTime * deltaTime;
+        // smooth bobbing equation - math rules - I wont lie I had to AI this. 
+        // I could not think of the name of the equation needed 
+        this.position.y = this.startY + Math.sin(this.bobAngle * 60) * this.bobHeight;
+      }
+    }
+
+    // the ground
+    // the lowest level the player can go
+    class Ground {
+      constructor() {
+        this.width = canvasItems.width / 1.5;
+        this.height = 10;
+        this.spawnHeight = global.groundSpawnHeight;
+        this.jaggedOffsets = [];
+        this.position = {
+          x: ((canvasItems.width / 2) - (this.width / 2)),
+          y: ((canvasItems.height - this.height) - this.spawnHeight),
+        };
+        this.color = "white";
+        this.opacity = 0;
+        this.fadeSpeed = 0.05;
+        this.img = new Image();
+        this.img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(captcha.misc.upArrows);
+        this.arrowBob = 0;
+        this.arrowBobSpeed = 0.08;
+        this.arrowBobHeight = 5;
+        this.arrowSpawnHeight = 28;
+        this.shadowColor = "white";
+      }
+      draw() {
+        const ctx = canvasItems.ctx;
+
+        ctx.save();
+          ctx.globalAlpha = this.opacity;
+
+          ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+          ctx.fillRect(
+            this.position.x + 1,
+            this.position.y - canvasItems.camera.y + (this.height / 2),
+            this.width - 2,
+            6
+          );
+
+          // light coming from above
+          ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+          ctx.shadowBlur = 4;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 2; // pushes shadow downward
+
+          // filling the actual ground
+          ctx.fillStyle = this.color;
+          ctx.fillRect(
+            this.position.x,
+            this.position.y - canvasItems.camera.y,
+            this.width,
+            this.height
+          );
+
+          ctx.shadowColor = "transparent";
+
+          // stroking the ground to make it stand out more
+          ctx.strokeStyle = this.strokeColor;
+          ctx.lineWidth = 0.5;
+          ctx.strokeRect(
+            this.position.x,
+            this.position.y - canvasItems.camera.y,
+            this.width,
+            this.height
+          );
+        ctx.restore();
+
+        ctx.save();
+          if (this.img.complete) {
+
+            const width = 10;
+            const height = 16;
+
+            // I want the arrows spawned halfway between the gaps on the sides
+            const midwayLeft = (this.position.x / 2) - (width / 2);
+            const midwayRight = ((canvasItems.width - (this.position.x + this.width)) / 2) + (this.position.x + this.width) - (width / 2);
+
+            const y = canvasItems.height - this.arrowSpawnHeight;
+
+            // arrows bobbing looks cooler
+            const bobLeft = Math.sin(this.arrowBob) * this.arrowBobHeight;
+            const bobRight = Math.sin(this.arrowBob + Math.PI) * this.arrowBobHeight;
+
+            const leftY = (y + bobLeft) - canvasItems.camera.y;
+            const rightY = (y + bobRight) - canvasItems.camera.y;
+
+            const iterations = global.enemyBcgGlowLoops; // amount of times the shadow gets looped
+            // not making a new thing for this just using the enmy loops
+
+            ctx.shadowColor = this.shadowColor; // shadow color
+
+            // Glow settings
+            // im stacking multiple glows for a stronger affect
+            for (let i = 0; i < iterations; i++) {
+              ctx.shadowBlur = 10 + i * 5; // shadow strength | increases each pass
+              
+              ctx.drawImage(this.img, midwayLeft, (y + bobLeft) - canvasItems.camera.y, width, height);
+              ctx.drawImage(this.img, midwayRight, (y + bobRight) - canvasItems.camera.y, width, height);
+            }
+
+            // crispen up the final ctx image
+            ctx.shadowBlur = 0;
+
+            ctx.drawImage(this.img, midwayLeft, leftY, width, height);
+            ctx.drawImage(this.img, midwayRight, rightY, width, height);
+
+          }
+        ctx.restore();
+      }
+      update(deltaTime) {
+        this.draw();
+
+        this.arrowBob += this.arrowBobSpeed * deltaTime * 60;
+
+        // slowly fade this in
+        if (this.opacity < 1) {
+          this.opacity += this.fadeSpeed * deltaTime * 60;
+
+          if (this.opacity > 1) this.opacity = 1;
+        }
+      }
+    }
+
+    // platform for the player to jump on
+    class Platform {
+      constructor() {
+        this.maxWidth = 100;
+        this.minWidth = 30;
+        this.width = Math.random() * (this.maxWidth - this.minWidth) + this.minWidth;
+        this.height = Math.random() * (6 - 3) + 3;  // 4 was default, changed for fun
+        this.spawnTolerance = Math.random() * (-32.5 + 22.5) - 22.5; // -25 is default
+        this.spawnHeight = global.platformSpawnSeperation;
+        this.padding = 12; // keeps it ... units away from the edges
+        this.finishPlatform = false
+        this.opacity = 0; // starts invisible, fade it in when it spawns
+        this.position = {
+          x: this.padding + Math.random() * (canvasItems.width - this.width - this.padding * 2),
+          y: 0,
+        };
+        this.initialSpawnY = null;
+        this.strokeColor = "black";
+        this.img = new Image();
+        this.img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(captcha.misc.finishFlag); // the finish flag image
+        this.imgWidth = 25;
+        this.imgHeight = 25;
+        this.flagFloat = 12;
+        this.flagBob = 0;
+        this.flagBobSpeed = 0.08;
+        this.flagBobHeight = 5;
+      }
+      // grabs the inital spawning height of the first platform
+      // all other platforms are based off this
+      initialHeight() {
+        return (
+          captcha.ground.ground.position.y -
+          captcha.player.player.height -
+          captcha.player.player.jumpHeight +
+          this.spawnTolerance
+        );
+      }
+      draw() {
+        const ctx = canvasItems.ctx;
+
+        // making the box shadows slighly smaller then the platforms themselves
+        const x = this.position.x + 1;
+        const y = this.position.y - canvasItems.camera.y + (this.height / 2);
+        const w = this.width - 2;
+        const h = 6;
+
+        ctx.save();
+
+        // soft blur 
+        ctx.filter = "blur(3px)";
+        ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+        ctx.fillRect(x, y, w, h);
+
+        // fade it out 
+        ctx.filter = "none";
+        const gradient = ctx.createLinearGradient(0, y, 0, y + h);
+        gradient.addColorStop(0, "rgba(0,0,0,0.25)");
+        gradient.addColorStop(1, "rgba(0,0,0,0)");
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x, y, w, h);
+
+        ctx.restore();
+        ctx.save();
+
+        ctx.fillStyle = this.finishPlatform ? "green" : "white";;
+        ctx.fillRect(
+          this.position.x,
+          this.position.y - canvasItems.camera.y,
+          this.width,
+          this.height
+        );
+
+        ctx.shadowColor = "transparent";
+
+        // stroking the final 
+        ctx.strokeStyle = this.strokeColor;
+        ctx.lineWidth = 0.5;
+        ctx.strokeRect(
+          this.position.x,
+          this.position.y - canvasItems.camera.y,
+          this.width,
+          this.height
+        );
+        ctx.restore();
+
+        // if its the final platform
+        // draw the green finish flag
+        ctx.save();
+        if (this.finishPlatform) {
+
+          // where to spawn the flag at, keeping it in the mid of the platform a little above
+          const flagX = (this.position.x + (this.width / 2)) - (this.imgWidth / 2); // finds the x position of the flag
+          const flagY = (this.position.y - this.imgHeight - this.flagFloat)
+
+          // bobbing of the flag, makes it look cooler
+          const bob = Math.sin(this.flagBob) * this.flagBobHeight;
+
+          ctx.drawImage(this.img, flagX, (flagY + bob) - canvasItems.camera.y, this.imgWidth, this.imgHeight);
+        }
+        ctx.restore();
+      }
+      update(deltaTime) {
+        this.draw();
+
+        // adding bob to the flag
+        this.flagBob += this.flagBobSpeed * deltaTime * 60;
+
+        // fading in each platform for a cleaner look
+        if (this.opacity < 1) {
+          this.opacity += 0.02 * deltaTime * 60; // smooth fade in
+          if (this.opacity > 1) this.opacity = 1;
+        }
+      }
+    }
+
+    // collision checker | 2 entities only
+    function collisionChecker(player, enemy) {
+      return (
+        player.position.x < enemy.position.x + enemy.width && // left of player is on right of enemy
+        player.position.x + player.width > enemy.position.x && // right of player is on left of enemy
+        player.position.y < enemy.position.y + enemy.height && // top of player is on bot of enemy
+        player.position.y + player.height > enemy.position.y // bot of player is on top of enemy
+      );
+    }
+
+    // function to send messages to parent
+    // copied this from examples - thanks
+    function sendToParent(msg) {
+      window.top.postMessage(msg, '*');
+    }
+
+    // If the player comletes the captcha, call this
+    function captchaComplete() {
+
+      // pause the captcha
+      captcha.paused = true;
+
+      // pause the video
+      sendToParent({ type: 'pause' });
+
+      // if the finish screen is not assigned a variable yet assign one
+      if (!captcha.vars.finishScreen) captcha.vars.finishScreen = document.getElementById("completeWrap");
+      captcha.vars.finishScreen.style.display = 'flex';
+
+      if (!captcha.vars.starDiv) {
+        captcha.vars.starDiv = document.querySelectorAll('#ratingWrapStarWrapFinish span');
+      }
+      else {
+        captcha.vars.starDiv = document.querySelectorAll('#ratingWrapStarWrapFinish span');
+        if (captcha.vars.rating)  {        
+          const ratingSub = document.getElementById("ratingSubtitleFinish");
+          if (ratingSub.textContent === "") ratingSub.textContent = "(Rating automatically submitted upon completion)";
+        }
+      }
+
+      const stars = captcha.vars.starDiv;
+
+      // to actually highlight the stars
+      function highlightStars(index) {
+        stars.forEach((s, i) => {
+          s.classList.toggle("active", i <= index);
+        });
+      }
+
+      // current star index, to highlight 1 behind
+      let currIndex = -1;
+      // star highlighting function
+      stars.forEach((star, index) => {
+
+        // hovering function
+        star.addEventListener("mouseenter", () => {
+          highlightStars(index);
+        });
+
+        // leaving the stars with the mouse
+        star.addEventListener("mouseleave", () => {
+          if (captcha.vars.rating) {
+            highlightStars(captcha.vars.rating);
+          }
+          else {
+            highlightStars(currIndex);
+          }
+        })
+
+        // lock in rating
+        star.addEventListener('click', () => {
+          currIndex = index;
+          highlightStars(currIndex);
+
+          captcha.vars.rating = index; 
+          
+          console.log(index);
+
+          const ratingSub = document.getElementById("ratingSubtitleFinish");
+          if (ratingSub.textContent === "") ratingSub.textContent = "(Rating automatically submitted upon completion)"; 
+        })
+        if (captcha.vars.rating) {
+          highlightStars(captcha.vars.rating);
+        }
+      })
+
+      // add to the done button the call to complete
+      const doneBtn = document.getElementById("quitBtn2");
+      doneBtn.addEventListener('click', () => {
         adSuccess();
+      }, { once: true });
+
+
+    // to restart the game if wanted
+      const restartBtn = document.getElementById("restartBtn3");
+      restartBtn.addEventListener('click', () => {
+
+        captcha.vars.finishScreen.style.display = 'none';
+
+        // if this is not assigned yet
+        if (!captcha.vars.adPopDiv) captcha.vars.adPopDiv = document.getElementById("adPopWrap");
+
+        // this holds all the popups unfortunately
+        // this is coded so badly | at the end here so in retrospect I see the horidness
+        captcha.vars.adPopDiv.style.display = 'flex';
+
+        // I realize my typo.. I'm not going to fix it. It is way to late. I'm sure there is an easy way i'm not aware of
+        if (!captcha.vars.retartScreen) captcha.vars.retartScreen = document.getElementById("countdownRestart");
+        
+        let id = "restart";
+        const retartingAdDiv = document.getElementById("restartingAd");
+        retartingAdDiv.style.display = 'flex';
+        countdown(3, captcha.vars.retartScreen, id);
+
+        setTimeout(() => {
+
+          // if the restarting ad screen is open, close it
+          if (document.getElementById("restartingAd").style.display === 'flex') document.getElementById("restartingAd").style.display = 'none';
+          // if the closing ad screen is open, close it
+          if (document.getElementById("closingAd").style.display === 'flex') document.getElementById("closingAd").style.display = 'none';
+          // if the report screen is open, close it
+          if (captcha.vars.repScreen) {
+            if (captcha.vars.repScreen.style.display === 'flex') {
+              captcha.vars.repScreen.style.display = 'none';
+            }
+          }
+          const html = document.documentElement;
+          const body = document.body;
+          html.style.cursor = "none";
+          body.style.cursor = "none";
+          captcha.paused = false;
+          captcha.vars.adPopDiv.style.display = 'none';
+          restartCaptcha();
+        }, 3500);
+
+      }, { once: true });
+    }
+
+    // sets up the canvas element to be called later
+    // I like doing it this way
+    // im a total noob
+    function setCanvas() {
+      // set canvas 
+      canvasItems.canvas = document.querySelector('canvas');
+      if (!canvasItems.canvas) {
+        // this should not happen - But if a canvas is not found leave the function
+        console.log("No canvas found!");
+        return false;
+      }
+      // starting ad
+      // sets ctx and canvas values
+      canvasItems.initialized = true;
+
+      // set all canvas stuff
+      canvasItems.ctx = canvasItems.canvas.getContext("2d"); 
+      canvasItems.width = canvasItems.canvas.width;
+      canvasItems.height = canvasItems.canvas.height;
+
+      return true;
+    }
+
+    // keypress event function 
+    // keeping this seperate to call later if needed
+    function waitForKeyPress() {
+      return new Promise(resolve => {
+        function handler(e) {
+          // if the player is still in intro and a key is pressed, ignore it
+          if (!captcha.player.player.introFall) {
+            return;
+          }
+          window.removeEventListener('keydown', handler);
+          resolve(e);
+        }
+        // listen for any key down
+        // this lets us know the user has engaged
+        window.addEventListener('keydown', handler);
+          canvasItems.canvas.focus();
+      });
+    }
+
+    function restartCaptcha() {
+      //console.log("restarting game");
+      // reset the video to the first frame
+      sendToParent({ type: "seekTo", value: 0 });
+
+      // set adhit back to 0
+      captcha.player.hitCount = 0;
+      // update the hitcount label
+      const hitCount = document.getElementById("hitCountLabel");
+      const label = `Ads disabled: ${captcha.player.hitCount}`;
+      hitCount.textContent = label;
+
+      // reset all enemies
+      if (captcha.enemy_ad.array) captcha.enemy_ad.array = [];
+
+      // set the player back to 0
+      if (captcha.player.player) {
+        captcha.player.player.position.y = captcha.ground.ground.position.y - captcha.player.player.height;
+        captcha.player.player.position.x = (canvasItems.width / 2) - (captcha.player.player.width / 2);
+      }
+    }
+
+    // the stages the game goes through
+    // this code is kinda nasty I wont lie
+    async function stages() {
+      switch (captcha.vars.currStage) {
+        case "intro":
+          //console.log("starting intro");
+
+          // the title wrap itself
+          captcha.vars.titleDiv = document.getElementById('titleWrap');
+
+          // the intros main title
+          const h1 = document.createElement("h1");
+          h1.className = "title main";
+          h1.innerHTML = captcha.stages.intro.getTitle();
+
+          // the intros subtitle 
+          const h3 = document.createElement("h3");
+          h3.className = "title sub";
+          h3.innerHTML = captcha.stages.intro.subTitle;
+
+          // immediately place the main title
+          captcha.vars.titleDiv.appendChild(h1);
+
+          // wait a bit and then put the sub title in there
+          setTimeout(() => {
+            captcha.vars.titleDiv.appendChild(h3);
+          }, 500);
+
+          // wait here for any key press
+          // just to ak that the user is playing
+          await waitForKeyPress();
+
+          // fadeout the title div after a keypress
+          captcha.vars.titleDiv.classList.add('fadeOut');
+
+          captcha.vars.progressBar = document.getElementById("progress");
+
+          // fadeIn the HUD div
+          const hudWrap = document.getElementById("hudWrap");
+          hudWrap.classList.add('fadeIn');
+
+          // clear the title div for future use
+          setTimeout(() => {
+            captcha.vars.titleDiv.innerHTML = '';
+            captcha.vars.titleDiv.className = 'contained'
+            captcha.vars.titleDiv.style.opacity = 1;
+            stages();
+          }, 750);
+
+          break;
+        case "middle":
+            // create the enemies once conditions met
+            // spawn enemies once camera level is above certain point
+            captcha.enemy_ad.spawning = true;
+
+            // set the "pesky ads" title
+            const div =document.createElement("div");
+            const h4 = document.createElement("h4");
+            h4.className = "enemySub title";
+            h4.innerHTML = captcha.stages.intro.enemyTitle;
+
+            captcha.vars.titleDiv.appendChild(h4);
+
+            if (!captcha.vars.adPopDiv) captcha.vars.adPopDiv = document.getElementById("adPopWrap");
+
+            // start spawning enemies here
+            // the loop is in the captcha
+            captcha.stages.intro.enemyTitleActive = true;
+
+          break;
+          // never going to finish this
+          // using cases was stupid but im too far already
+          // came back to say this is dumb
+        case "finish":
+          // so dumbo wumbo
+          break;
+        default:
+      }
+    }
+
+    // timer function if needed
+    function countdown(seconds, text, idName) {
+      let current = seconds;
+      text.textContent = current;
+
+      // set timer amount
+      const interval = setInterval(() => {
+        current--;
+
+        if (current > 0) {
+          text.textContent = current;
+        }
+        else {
+          if (idName === "restart") {
+            text.textContent = "restarting";
+            clearInterval(interval);
+            if (captcha.paused) sendToParent({ type: 'play' });
+          }
+          else {
+            text.textContent = "closing";
+            clearInterval(interval);
+            if (captcha.paused) sendToParent({ type: 'play' });
+          }
+        }
+      }, 1000);
+    }
+
+    // the timer for the video
+    // this is copy / pasted ill admit, did not know how to do this. 
+    function describeArc(cx, cy, r, progress) {
+
+      document.getElementById("timerText").textContent = captcha.vars.timeLeft;
+
+      // clamp progress
+      progress = Math.max(0, Math.min(1, progress));
+      progress = 1 - progress;
+
+      const startAngle = -Math.PI / 2; // top
+      const endAngle = startAngle + progress * Math.PI * 2;
+
+      const x = cx + r * Math.cos(endAngle);
+      const y = cy + r * Math.sin(endAngle);
+
+      const largeArc = progress > 0.5 ? 1 : 0;
+
+      // this is copy / pasted, Not smart enough for these equations
+      return `
+        M ${cx} ${cy}
+        L ${cx + r * Math.cos(startAngle)} ${cy + r * Math.sin(startAngle)}
+        A ${r} ${r} 0 ${largeArc} 1 ${x} ${y}
+        Z
+      `;
+    }
+
+    // the "captcha" ;)
+    function captchaCheck(currentTime = 0) {
+
+      // keep updating deltaTime even if the game is paused
+      const deltaTime = (currentTime - captcha.vars.lastTime) / 1000; // seconds
+      captcha.vars.lastTime = currentTime;
+
+    // paused game status
+      if (captcha.paused) {
+        requestAnimationFrame(captchaCheck);
+        return;
+      }
+
+    // *** placing all single use 'captcha' code here *** ///
+
+      // if the player is not initiated | initiate it
+      if (!captcha.player.player) {
+        captcha.player.player = new Player()
+        captcha.player.player.draw();
+        setupControls();
+      }
+
+      // create the ground once conditions met
+      if (!captcha.ground.ground && captcha.player.player && captcha.player.player.position.y + captcha.player.player.height > canvasItems.height / 2) {
+        captcha.ground.ground = new Ground();
+        captcha.ground.ground.draw();
+      }
+
+      // set the max platforms to be spawned
+      if (!captcha.platforms.max) captcha.platforms.max = Math.ceil(captcha.vars.videoDuration / global.secondsPerPlatform);
+
+    // *** placing all recurring 'captcha' code here *** //
+
+      // clear canvas each frame
+      canvasItems.ctx.clearRect(0, 0, canvasItems.width, canvasItems.height); 
+
+      // update the player each frame
+      captcha.player.player.update(deltaTime);
+
+      // if player is in top 40% of screen
+      // move the screen upwards
+      const screenThreshold = canvasItems.height * 0.4;
+      if (captcha.player.player.position.y < screenThreshold && captcha.vars.currStage !== "intro") {
+        const targetY = captcha.player.player.position.y - screenThreshold;
+        canvasItems.camera.y += (targetY - canvasItems.camera.y) * 0.1;
+      }
+      // if player is in bottom 20% of screen
+      // move the screen down
+      if (captcha.player.player.position.y + captcha.player.player.height > canvasItems.height - (screenThreshold) &&
+      captcha.vars.currStage !== "intro" &&
+      canvasItems.camera.y < 0) {
+        const targetY = captcha.player.player.position.y + captcha.player.player.height - (canvasItems.height - screenThreshold);
+        canvasItems.camera.y += (targetY - canvasItems.camera.y) * 0.1;
+        if (canvasItems.camera.y > 0) {
+          canvasItems.camera.y = 0;
+        }
+      }
+
+      //update the progress bar in the hud
+      if (captcha.vars.progressBar) {
+        if (!captcha.player.startY) {
+          captcha.player.startY = captcha.ground.ground.position.y + captcha.player.player.height;
+        }
+        const finalPlatY = captcha.platforms.array.at(-1).position.y;
+        
+        const totalDistance = finalPlatY - captcha.player.startY;
+        const currDistance = (captcha.player.player.position.y + captcha.player.player.height) - captcha.player.startY;
+
+        // sets the progress ratio
+        const progress = currDistance / totalDistance;
+      
+        // actually sets the value in the progressBar
+        const clamped = Math.min(Math.max(progress, 0), 1);
+        captcha.vars.progressBar.value = clamped;
+
+        const hue = clamped * 120;
+        const lightness = 30; // I want the color a little darker as it progresses
+
+        document.querySelector("#progress").style.setProperty("--progress-color",`hsl(${hue}, 80%, ${lightness}%)`);
+
+        //console.log(progress);
+      }
+
+      // update the ground
+      if (captcha.ground.ground) captcha.ground.ground.update(deltaTime);
+
+      // spawn platforms during middle stage
+      if (
+        captcha.vars.currStage === "middle" &&
+        captcha.ground.ground &&
+        captcha.platforms.array.length < captcha.platforms.max
+      ) {
+
+        const platform = new Platform();
+        // initial platform spawn
+        if (captcha.platforms.array.length === 0) {
+          platform.position.y = platform.initialHeight();
+          captcha.platforms.array.push(platform);
+        }
+        // all other platform spawns
+        else {
+          // grab the most recent platform in the array
+          const lastPlatform = captcha.platforms.array[captcha.platforms.array.length - 1];
+          // grab that platforms Y
+          const newY = lastPlatform.position.y - platform.spawnHeight;
+          platform.position.y = newY;
+
+          // the last platform | detects the adskip
+          if (captcha.platforms.array.length + 1 === captcha.platforms.max) {
+            platform.finishPlatform = true;
+          }
+          captcha.platforms.array.push(platform);
+        }
+      }
+
+      // update each platform each frame
+      captcha.platforms.array.forEach(platform => {
+        platform.update(deltaTime);
+      })
+
+      // cooldown timer for the enemy spawns
+      let lastEnemySpawn = 0;
+
+      // as long as enemies can start spawning
+      if (captcha.enemy_ad.spawning) {
+        // spawn limiter for lag
+        if (performance.now() - captcha.enemy_ad.lastEnemySpawn > captcha.enemy_ad.spawnLimiter) {
+          if (Math.random() < captcha.enemy_ad.spawnChance / 100) {
+            const enemy = new Enemy_ad(canvasItems.camera.y - (Math.random() * (200-50) + 50));
+            captcha.enemy_ad.array.push(enemy);
+            captcha.enemy_ad.lastEnemySpawn = performance.now();
+            // console.log("spawning enemy");
+          }
+        }
+      }
+
+      // update the ad enemies each frame
+      // if there are any enemies at all
+      captcha.enemy_ad.array = captcha.enemy_ad.array.filter(enemy => {
+        if (enemy.delete) return false;
+        enemy.update(deltaTime);
+
+        // always checking for collisions between player and each enemy
+        if (!enemy.hit && collisionChecker(captcha.player.player, enemy)) {
+          enemy.hit = true; // if enemy is hit by player, toggle enemys hit
+          enemy.adHit();
+          captcha.paused = true;
+        }
+
+        return true; 
       });
 
-    })(window, document);
+      // console logger
+
+      // animation frames
+      requestAnimationFrame(captchaCheck);
+    }
   </script>
 </body>
 </html>
