@@ -27,6 +27,37 @@
       cursor: none;
     }
 
+    #startWrap {
+      width: 960px;
+      height: 540px;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+
+      position: absolute;
+      z-index: 2000;
+      cursor: pointer;
+    }
+    #real-skip {
+      position: absolute;
+      bottom: 24px;
+      right: 16px;
+      font-size: 2rem;
+      color: black;
+      cursor: pointer;
+      background: white;
+      border: none;
+      font-family: sans-serif;
+      padding: 2px 8px;
+    }
+
+    #real-skip:hover {
+      box-shadow: 0 0 2px 4px rgb(0, 0, 0, 0.5);
+    }
+    #real-skip:active {
+      scale: 1.02;
+    }
+
 /*****************************************************************************************/    
     /* page-wrapper */
     #pageWrap {
@@ -709,6 +740,9 @@
 </head>
 <!-- **************************************************************** -->
 <body>
+  <div id="startWrap">
+    <button id="real-skip">Skip Ad <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M660-240v-480h80v480h-80Zm-440 0v-480l360 240-360 240Z"/></svg></button>
+  </div>
   <div id="pageWrap">
     <!-- The actual captcha 'game' -->
     <canvas id="captchaGame" class="contained" tabindex="0"></canvas>
@@ -877,30 +911,22 @@
 
         // if the data recieved is of "adStarted"
         if (event.data.type === 'adStarted') {
-          // wait for the canvas to be set
-          if (!canvasItems.initialized) {
-            canvasItems.initialized = true;
-              // wait for set canvas to respond with true or false
-              const result = await setCanvas();
-              // if setCanvas returns false or undefined, exit, something went wrong
-              // that shouldn't really happen I think
-              if (!result) {
-                console.log("Canvas could not be initialized");
-                alert("Something unexpected has occured");
-                return;
-              }
-              // runs on initial game start
-              if (!captcha.started) {
-                captcha.started = true;
-                captcha.vars.currStage = "intro";
+          if (!captcha.startDiv) captcha.startDiv = document.getElementById("startWrap");
+          if (!captcha.skipAdBtn) {
+            captcha.skipAdBtn = document.getElementById("real-skip");
+            button = captcha.skipAdBtn;
+            button.addEventListener('click', () => {
 
-                // if setCanvas returns true and captcha hasnt started already
-                // start the captcha
-                captchaCheck();
-                // located at the bottom of the page
-              }
+              captcha.startDiv.classList.add('fadeOut');
+              start();
+
+              setTimeout(() => {
+                captcha.startDiv.style.display = 'none';
+              },500);
+
+            }, { once: true})
+
           }
-          // Show the skip button when the ad starts
         }
         // By default, if the user doesn't "skip" the ad before the video ends,
         // we call fail to restart. You're welcome to replace this with a survey
@@ -972,7 +998,7 @@
     })(window, document);
 
 /************************************************************************************
- ***                                                                              ***
+***                                                                               ***
 ***                          ALL GLOBAL FUNCTIONS                                 ***
 ***                        BELOW HERE | IN 'GLOBAL'                               ***
 ***                                                                               ***
@@ -1009,7 +1035,7 @@
         introEnemy: `* Avoid those<br>pesky ads! *`,                      // enemy 'altert' title once player begins 'playing'
 
       // player settings
-        playerInitFallSpeed: 1.5,   // 1.5 default | Higher = faster
+        playerInitFallSpeed: 1.75,   // 1.75 default | Higher = faster
         playerJumpHeight: 5,        // 5 default 
         playerMoveSpeed: 5,         // 5 default
         playerBcgGlowLoops: 2,      // 2 default | amount of times the players glow is looped for stronger glow affect
@@ -1073,6 +1099,8 @@
     // All things inside the captcha
     // keeping images as SVG files to prevent extra folders
     const captcha = {
+      startDiv: null,
+      skipAdBtn: null,
       // game start
       started: false,
       paused: false,
@@ -1258,6 +1286,32 @@
         }
       })
     };
+
+    async function start() {
+    // wait for the canvas to be set
+      if (!canvasItems.initialized) {
+        canvasItems.initialized = true;
+          // wait for set canvas to respond with true or false
+          const result = await setCanvas();
+          // if setCanvas returns false or undefined, exit, something went wrong
+          // that shouldn't really happen I think
+          if (!result) {
+            console.log("Canvas could not be initialized");
+            alert("Something unexpected has occured");
+            return;
+          }
+          // runs on initial game start
+          if (!captcha.started) {
+            captcha.started = true;
+            captcha.vars.currStage = "intro";
+
+            // if setCanvas returns true and captcha hasnt started already
+            // start the captcha
+            captchaCheck();
+            // located at the bottom of the page
+          }
+      }
+    }
     
   // player class
   // controls all player aspects
@@ -1267,7 +1321,7 @@
         this.width = 8;
         this.position = { // players initial starting position
             x: (canvasItems.width / 2) - (this.width / 2),
-            y: 0 - this.height,
+            y: 0 - (this.height * 1),
         };
         this.velocity = { // players initial velocities
           x: 0,
@@ -2399,6 +2453,11 @@
 
     // the "captcha" ;)
     function captchaCheck(currentTime = 0) {
+
+      // first frame setup
+      if (!captcha.vars.lastTime) {
+        captcha.vars.lastTime = currentTime;
+      }
 
       // keep updating deltaTime even if the game is paused
       const deltaTime = (currentTime - captcha.vars.lastTime) / 1000; // seconds
